@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const foodPartnerModel = require('../models/foodPartner.model.js');
 
-async function authFoodPartnerMiddleware(req ,res , nest) {
+async function authFoodPartnerMiddleware(req ,res , next) {
     const token = req.cookies.token;
 
     if(!token){
@@ -13,10 +13,9 @@ async function authFoodPartnerMiddleware(req ,res , nest) {
     try {
        const isValidToken = jwt.verify(token , process.env.JWT_SECRET);
 
-      const foodPartner = await foodPartnerModel.findById(isValidToken.id);
+      const foodPartner = await foodPartnerModel.findById(isValidToken._id);
 
       req.foodPartner = foodPartner;
-
 
        next();
 
