@@ -15,6 +15,7 @@ const fs = require('fs');
        resource_type : "video"
      });
      console.log("File is SuccessFully Upload on Cloundinary" , response.url);
+     fs.unlinkSync(video)
      return response;
 
      } catch (error) {

@@ -4,17 +4,33 @@ const { v4: uuid } = require("uuid");
 
 
 async function createFood(req, res) {
-  console.log("FoodPartner :" , req.foodPartner);
-  res.send("Food Item Created");
-  console.log("body :" ,  req.body);
 
   const uploadImagetoCloudinary = await storageService.uploadOnCloundinary(req.file.path , uuid());
 
-  console.log(uploadImagetoCloudinary , "Upload Compeleted");
+  console.log(uploadImagetoCloudinary , "Image Upload Compeleted");
+   
+  const foodItem = await foodModel.create({
+     name : req.body.name,
+     description : req.body.description,
+     video : uploadImagetoCloudinary.url,
+     foodPartner : req.foodPartner._id
+  });
 
-  console.log("File :" , req.file);
+  res.status(201).json({
+    message : "Food Item created SuccessFully",
+    food : foodItem
+  })
 }
+
+async function getfoodReel(req , res) {
+   const foodItem = await foodModel.find({});
+   res.status(200).json({
+    message : "Food Items fetched SuccessFully",
+    foodItem
+   })
+};
 
 module.exports = {
   createFood,
+  getfoodReel
 };
